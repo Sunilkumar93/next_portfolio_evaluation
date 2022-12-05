@@ -1,9 +1,10 @@
 name:Evaluation
 
 
-on: [push]
+on: 
 
-on: [push, pull_request]
+ push:
+   branches: ["main"]
 
 jobs:
   build:
@@ -13,7 +14,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Install node 16
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 16.x
       - name: Install NPM Dependencies
@@ -24,7 +25,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: production-files
-          path: ./.next
+          path: ./out
       # deployed job
 
   deploy:
@@ -37,10 +38,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: production-files
-          path: ./.next
+          path: ./out
 
       - name: Deploy to github pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{secrets.PROJECT_DEPLOY}}
-          publish_dir: ./.next      
+          publish_dir: ./pages/index.js    
